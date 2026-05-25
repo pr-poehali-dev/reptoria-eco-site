@@ -113,6 +113,8 @@ export default function Index() {
   const [wholesaleOpen, setWholesaleOpen] = useState(false);
   const [wholesaleForm, setWholesaleForm] = useState({ name: "", phone: "", email: "", comment: "" });
   const [wholesaleStep, setWholesaleStep] = useState<"form" | "success">("form");
+  const [wholesaleItems, setWholesaleItems] = useState<{ productId: number; qty: number }[]>([{ productId: PRODUCTS[0].id, qty: 1 }]);
+  const [wholesalePayment, setWholesalePayment] = useState<"sbp" | "card" | "">(""); 
 
   const totalItems = cart.reduce((s, i) => s + i.qty, 0);
   const totalPrice = cart.reduce((s, i) => s + i.product.price * i.qty, 0);
@@ -769,8 +771,9 @@ export default function Index() {
             {wholesaleStep === "form" ? (
               <form
                 onSubmit={(e) => { e.preventDefault(); setWholesaleStep("success"); }}
-                className="p-6 space-y-4"
+                className="p-6 space-y-4 overflow-y-auto max-h-[75vh]"
               >
+                {/* Контакты */}
                 {[
                   { key: "name", label: "Ваше имя", placeholder: "Иван Иванов", type: "text", required: true },
                   { key: "phone", label: "Телефон", placeholder: "+7 (999) 000-00-00", type: "tel", required: true },
@@ -790,21 +793,102 @@ export default function Index() {
                     />
                   </div>
                 ))}
+
+                {/* Состав заказа */}
+                <div>
+                  <label className="font-body text-xs font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider mb-2 block">
+                    Состав заказа <span className="text-[hsl(var(--moss))]">*</span>
+                  </label>
+                  <div className="space-y-2">
+                    {wholesaleItems.map((item, idx) => (
+                      <div key={idx} className="flex gap-2 items-center">
+                        <select
+                          value={item.productId}
+                          onChange={(e) => setWholesaleItems((prev) => prev.map((it, i) => i === idx ? { ...it, productId: Number(e.target.value) } : it))}
+                          className="flex-1 border border-[hsl(var(--border))] rounded-xl px-3 py-2.5 font-body text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[hsl(var(--moss))]/40 transition-all"
+                        >
+                          {PRODUCTS.map((p) => (
+                            <option key={p.id} value={p.id}>{p.name}</option>
+                          ))}
+                        </select>
+                        <div className="flex items-center gap-1 bg-[hsl(var(--sand))] rounded-xl px-2 py-1.5">
+                          <button type="button" onClick={() => setWholesaleItems((prev) => prev.map((it, i) => i === idx ? { ...it, qty: Math.max(1, it.qty - 1) } : it))}
+                            className="w-6 h-6 rounded-full bg-white border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--muted))] transition-colors">
+                            <Icon name="Minus" size={11} />
+                          </button>
+                          <span className="font-body text-sm font-semibold w-7 text-center">{item.qty}</span>
+                          <button type="button" onClick={() => setWholesaleItems((prev) => prev.map((it, i) => i === idx ? { ...it, qty: it.qty + 1 } : it))}
+                            className="w-6 h-6 rounded-full bg-[hsl(var(--bark))] text-white flex items-center justify-center hover:bg-[hsl(var(--moss))] transition-colors">
+                            <Icon name="Plus" size={11} />
+                          </button>
+                        </div>
+                        {wholesaleItems.length > 1 && (
+                          <button type="button" onClick={() => setWholesaleItems((prev) => prev.filter((_, i) => i !== idx))}
+                            className="w-7 h-7 rounded-full hover:bg-red-50 flex items-center justify-center transition-colors flex-shrink-0">
+                            <Icon name="Trash2" size={13} className="text-red-400" />
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setWholesaleItems((prev) => [...prev, { productId: PRODUCTS[0].id, qty: 1 }])}
+                    className="mt-2 flex items-center gap-1.5 font-body text-xs text-[hsl(var(--moss))] hover:text-[hsl(var(--moss-light))] transition-colors"
+                  >
+                    <Icon name="Plus" size={13} />
+                    Добавить ещё товар
+                  </button>
+                </div>
+
+                {/* Способ оплаты */}
+                <div>
+                  <label className="font-body text-xs font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider mb-2 block">
+                    Способ оплаты <span className="text-[hsl(var(--moss))]">*</span>
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { value: "sbp", label: "СБП", icon: "Smartphone", desc: "Быстрый перевод" },
+                      { value: "card", label: "Перевод на карту", icon: "CreditCard", desc: "По реквизитам" },
+                    ].map((opt) => (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() => setWholesalePayment(opt.value as "sbp" | "card")}
+                        className={`flex items-center gap-2 p-3 rounded-xl border-2 transition-all text-left ${
+                          wholesalePayment === opt.value
+                            ? "border-[hsl(var(--moss))] bg-[hsl(var(--moss))]/8"
+                            : "border-[hsl(var(--border))] hover:border-[hsl(var(--moss-light))]"
+                        }`}
+                      >
+                        <Icon name={opt.icon} fallback="CircleAlert" size={18} className={wholesalePayment === opt.value ? "text-[hsl(var(--moss))]" : "text-[hsl(var(--muted-foreground))]"} />
+                        <div>
+                          <p className="font-body text-sm font-semibold text-[hsl(var(--foreground))]">{opt.label}</p>
+                          <p className="font-body text-xs text-[hsl(var(--muted-foreground))]">{opt.desc}</p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Комментарий */}
                 <div>
                   <label className="font-body text-xs font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider mb-1.5 block">
-                    Состав заказа / комментарий
+                    Комментарий
                   </label>
                   <textarea
-                    placeholder="Например: Кальций без Д3 — 50 шт, Кальций с Д3 — 30 шт..."
+                    placeholder="Дополнительные пожелания..."
                     value={wholesaleForm.comment}
                     onChange={(e) => setWholesaleForm((f) => ({ ...f, comment: e.target.value }))}
-                    rows={3}
+                    rows={2}
                     className="w-full border border-[hsl(var(--border))] rounded-xl px-4 py-3 font-body text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[hsl(var(--moss))]/40 focus:border-[hsl(var(--moss-light))] transition-all resize-none"
                   />
                 </div>
+
                 <button
                   type="submit"
-                  className="w-full bg-[hsl(var(--earth))] hover:bg-[hsl(var(--bark))] text-white font-body font-bold py-3.5 rounded-full transition-all hover:shadow-lg active:scale-[0.98] mt-2"
+                  disabled={!wholesalePayment}
+                  className="w-full bg-[hsl(var(--earth))] hover:bg-[hsl(var(--bark))] disabled:opacity-40 disabled:cursor-not-allowed text-white font-body font-bold py-3.5 rounded-full transition-all hover:shadow-lg active:scale-[0.98]"
                 >
                   Отправить заявку
                 </button>
@@ -825,6 +909,8 @@ export default function Index() {
                   onClick={() => {
                     setWholesaleOpen(false);
                     setWholesaleForm({ name: "", phone: "", email: "", comment: "" });
+                    setWholesaleItems([{ productId: PRODUCTS[0].id, qty: 1 }]);
+                    setWholesalePayment("");
                   }}
                   className="bg-[hsl(var(--bark))] text-white font-body font-semibold px-8 py-3 rounded-full hover:bg-[hsl(var(--moss))] transition-all"
                 >
