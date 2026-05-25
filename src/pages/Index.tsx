@@ -14,7 +14,7 @@ const GROUPS = [
         description: "Чистый карбонат кальция для укрепления костей и панциря. Идеален для бородатых агам и черепах.",
         price: 590,
         unit: "150 г",
-        image: "https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/bucket/f9a65db9-7ed3-4a4b-ae39-1e2147bd697d.png",
+        image: "https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/bucket/9699d77a-ae25-4641-8073-b39a9ec510a8.jpg",
         badge: "Хит",
         badgeColor: "bg-[hsl(var(--moss))] text-[hsl(var(--primary-foreground))]",
         category: "Минералы",
