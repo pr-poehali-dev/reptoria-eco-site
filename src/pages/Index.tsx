@@ -363,7 +363,7 @@ export default function Index() {
           <h2 className="font-display text-4xl font-bold text-center mb-10 text-[hsl(var(--foreground))]">Доставка и оплата</h2>
           <div className="grid sm:grid-cols-2 gap-6">
             {[
-              { icon: "Truck", title: "По России (СДЭК)", text: "2–5 дней · от 250 ₽\nПри заказе от 3000 ₽ — бесплатно" },
+              { icon: "Truck", title: "По России (СДЭК)", text: "3–6 дней · от 350 ₽\nПри заказе от 3000 ₽ — бесплатно" },
               { icon: "CreditCard", title: "Оплата", text: "Картой онлайн, СБП,\nналичными при получении" },
             ].map((item) => (
               <div key={item.title} className="flex gap-4 p-5 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--sand))]">
@@ -510,14 +510,30 @@ export default function Index() {
 
                 {cart.length > 0 && (
                   <div className="p-5 border-t border-[hsl(var(--border))] bg-[hsl(var(--sand))]">
-                    <div className="flex justify-between mb-2 font-body text-sm text-[hsl(var(--muted-foreground))]">
-                      <span>Товаров: {totalItems}</span>
-                      <span className="text-xs">Доставка рассчитается при оформлении</span>
-                    </div>
-                    <div className="flex justify-between mb-5 font-display text-2xl font-bold text-[hsl(var(--foreground))]">
-                      <span>Итого</span>
-                      <span>{totalPrice.toLocaleString("ru-RU")} ₽</span>
-                    </div>
+                    {(() => {
+                      const delivery = totalPrice > 3000 ? 0 : 350;
+                      const grandTotal = totalPrice + delivery;
+                      return (
+                        <>
+                          <div className="flex justify-between mb-1.5 font-body text-sm text-[hsl(var(--muted-foreground))]">
+                            <span>Товаров: {totalItems}</span>
+                            <span>{totalPrice.toLocaleString("ru-RU")} ₽</span>
+                          </div>
+                          <div className="flex justify-between mb-3 font-body text-sm">
+                            <span className={totalPrice > 3000 ? "text-[hsl(var(--moss))]" : "text-[hsl(var(--muted-foreground))]"}>
+                              Доставка {totalPrice > 3000 ? "(бесплатно от 3000 ₽)" : ""}
+                            </span>
+                            <span className={totalPrice > 3000 ? "text-[hsl(var(--moss))] font-semibold" : "text-[hsl(var(--muted-foreground))]"}>
+                              {totalPrice > 3000 ? "0 ₽" : "350 ₽"}
+                            </span>
+                          </div>
+                          <div className="flex justify-between mb-5 font-display text-2xl font-bold text-[hsl(var(--foreground))] border-t border-[hsl(var(--border))] pt-3">
+                            <span>Итого</span>
+                            <span>{grandTotal.toLocaleString("ru-RU")} ₽</span>
+                          </div>
+                        </>
+                      );
+                    })()}
                     <button
                       onClick={() => setCheckoutStep("form")}
                       className="w-full bg-[hsl(var(--moss))] hover:bg-[hsl(var(--moss-light))] text-white font-body font-semibold py-3.5 rounded-full transition-all hover:shadow-lg active:scale-[0.98]"
