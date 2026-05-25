@@ -76,8 +76,6 @@ const PRODUCTS = [
   },
 ];
 
-const CATEGORIES = ["Все", "Минералы", "Витамины", "Комплексы", "Пробиотики"];
-
 interface CartItem {
   product: (typeof PRODUCTS)[0];
   qty: number;
@@ -88,16 +86,12 @@ type CheckoutStep = "cart" | "form" | "success";
 export default function Index() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
-  const [activeCategory, setActiveCategory] = useState("Все");
   const [checkoutStep, setCheckoutStep] = useState<CheckoutStep>("cart");
   const [form, setForm] = useState({ name: "", phone: "", email: "", address: "", comment: "" });
   const [addedId, setAddedId] = useState<number | null>(null);
 
   const totalItems = cart.reduce((s, i) => s + i.qty, 0);
   const totalPrice = cart.reduce((s, i) => s + i.product.price * i.qty, 0);
-
-  const filtered =
-    activeCategory === "Все" ? PRODUCTS : PRODUCTS.filter((p) => p.category === activeCategory);
 
   const addToCart = (product: (typeof PRODUCTS)[0]) => {
     setCart((prev) => {
@@ -215,36 +209,15 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ── CATEGORIES ── */}
-      <section id="products" className="bg-white border-b border-[hsl(var(--border))]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-5 flex gap-2 overflow-x-auto">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`font-body text-sm px-5 py-2 rounded-full whitespace-nowrap transition-all ${
-                activeCategory === cat
-                  ? "bg-[hsl(var(--bark))] text-white shadow-sm"
-                  : "bg-[hsl(var(--sand))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-      </section>
-
       {/* ── PRODUCTS GRID ── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
+      <section id="products" className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
         <div className="flex items-baseline justify-between mb-8">
-          <h2 className="font-display text-4xl font-bold text-[hsl(var(--foreground))]">
-            {activeCategory === "Все" ? "Все товары" : activeCategory}
-          </h2>
-          <span className="font-body text-sm text-[hsl(var(--muted-foreground))]">{filtered.length} товаров</span>
+          <h2 className="font-display text-4xl font-bold text-[hsl(var(--foreground))]">Все товары</h2>
+          <span className="font-body text-sm text-[hsl(var(--muted-foreground))]">{PRODUCTS.length} товаров</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filtered.map((product, i) => (
+          {PRODUCTS.map((product, i) => (
             <div
               key={product.id}
               className="group bg-white rounded-2xl overflow-hidden border border-[hsl(var(--border))] hover:border-[hsl(var(--moss-light))] hover:shadow-xl transition-all duration-300 animate-fade-in-up"
