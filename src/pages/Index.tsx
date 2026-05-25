@@ -242,49 +242,49 @@ export default function Index() {
               <div className="flex-1 h-px bg-[hsl(var(--border))] ml-2" />
               <span className="font-body text-xs text-[hsl(var(--muted-foreground))]">{group.products.length} товара</span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {group.products.map((product, i) => (
             <div
               key={product.id}
               onClick={() => { setSelectedProduct(product); setModalQty(1); }}
-              className="group bg-[hsl(var(--sand))] rounded-2xl overflow-hidden border border-transparent hover:border-[hsl(var(--moss-light))] hover:shadow-xl transition-all duration-300 animate-fade-in-up cursor-pointer"
+              className="group bg-[hsl(var(--sand))] rounded-3xl overflow-hidden border border-transparent hover:border-[hsl(var(--moss-light))] hover:shadow-2xl transition-all duration-300 animate-fade-in-up cursor-pointer"
               style={{ animationDelay: `${i * 0.07}s` }}
             >
-              <div className="relative overflow-hidden h-52 bg-[hsl(var(--earth-light))]">
+              <div className="relative overflow-hidden h-72 bg-[hsl(var(--earth-light))]">
                 <img
                   src={product.image}
                   alt={product.name}
                   className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                 />
                 {product.badge && (
-                  <span className={`absolute top-3 left-3 text-xs font-body font-semibold px-2.5 py-1 rounded-full ${product.badgeColor}`}>
+                  <span className={`absolute top-4 left-4 text-sm font-body font-semibold px-3 py-1.5 rounded-full ${product.badgeColor}`}>
                     {product.badge}
                   </span>
                 )}
-                <span className="absolute top-3 right-3 bg-white/90 text-[hsl(var(--muted-foreground))] text-xs font-body px-2.5 py-1 rounded-full">
+                <span className="absolute top-4 right-4 bg-white/90 text-[hsl(var(--muted-foreground))] text-xs font-body px-3 py-1.5 rounded-full">
                   {product.category}
                 </span>
               </div>
 
-              <div className="p-5 bg-[hsl(var(--sand))]">
+              <div className="p-6 bg-[hsl(var(--sand))]">
                 <div className="mb-3">
-                  <h3 className="font-display text-xl font-semibold text-[hsl(var(--bark))] leading-tight">
+                  <h3 className="font-display text-2xl font-semibold text-[hsl(var(--bark))] leading-tight">
                     {product.name}
                   </h3>
-                  <p className="font-body text-xs text-[hsl(var(--moss-light))] font-medium mt-0.5">
+                  <p className="font-body text-sm text-[hsl(var(--moss-light))] font-medium mt-1">
                     {product.subtitle} · {product.unit}
                   </p>
                 </div>
-                <p className="font-body text-sm text-[hsl(var(--earth))] leading-relaxed mb-5 line-clamp-2">
+                <p className="font-body text-base text-[hsl(var(--earth))] leading-relaxed mb-6 line-clamp-2">
                   {product.description}
                 </p>
                 <div className="flex items-center justify-between">
-                  <span className="font-display text-2xl font-bold text-[hsl(var(--foreground))]">
+                  <span className="font-display text-3xl font-bold text-[hsl(var(--foreground))]">
                     {product.price.toLocaleString("ru-RU")} ₽
                   </span>
                   <button
                     onClick={(e) => { e.stopPropagation(); addToCart(product); }}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-full font-body text-sm font-medium transition-all active:scale-95 ${
+                    className={`flex items-center gap-2 px-5 py-3 rounded-full font-body text-base font-medium transition-all active:scale-95 ${
                       addedId === product.id
                         ? "bg-[hsl(var(--moss))] text-white scale-95"
                         : "bg-[hsl(var(--bark))] text-white hover:bg-[hsl(var(--moss))] hover:shadow-lg"
