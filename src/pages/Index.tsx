@@ -9,12 +9,12 @@ const GROUPS = [
     products: [
       {
         id: 1,
-        name: "Кальций Форте",
+        name: "Кальций РепТория без Д3",
         subtitle: "Без витамина D3",
         description: "Чистый карбонат кальция для укрепления костей и панциря. Идеален для бородатых агам и черепах.",
         price: 590,
         unit: "150 г",
-        image: "https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/files/d2e8a837-2df7-4a68-9a76-fadb6ff32b81.jpg",
+        image: "https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/bucket/f9a65db9-7ed3-4a4b-ae39-1e2147bd697d.png",
         badge: "Хит",
         badgeColor: "bg-[hsl(var(--moss))] text-[hsl(var(--primary-foreground))]",
         category: "Минералы",
