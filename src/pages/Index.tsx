@@ -106,6 +106,7 @@ export default function Index() {
   const [form, setForm] = useState({ name: "", phone: "", email: "", address: "", comment: "" });
   const [addedId, setAddedId] = useState<number | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<(typeof PRODUCTS)[0] | null>(null);
+  const [modalQty, setModalQty] = useState(1);
 
   const totalItems = cart.reduce((s, i) => s + i.qty, 0);
   const totalPrice = cart.reduce((s, i) => s + i.product.price * i.qty, 0);
@@ -245,7 +246,7 @@ export default function Index() {
           {group.products.map((product, i) => (
             <div
               key={product.id}
-              onClick={() => setSelectedProduct(product)}
+              onClick={() => { setSelectedProduct(product); setModalQty(1); }}
               className="group bg-white rounded-2xl overflow-hidden border border-[hsl(var(--border))] hover:border-[hsl(var(--moss-light))] hover:shadow-xl transition-all duration-300 animate-fade-in-up cursor-pointer"
               style={{ animationDelay: `${i * 0.07}s` }}
             >
@@ -614,14 +615,14 @@ export default function Index() {
             className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in"
             onClick={() => setSelectedProduct(null)}
           />
-          <div className="relative z-10 bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden animate-scale-in">
-            <div className="relative h-64 overflow-hidden">
+          <div className="relative z-10 bg-white rounded-3xl shadow-2xl max-w-lg w-full animate-scale-in">
+            {/* Картинка без обрезания */}
+            <div className="relative bg-[hsl(var(--sand))] rounded-t-3xl overflow-hidden">
               <img
                 src={selectedProduct.image}
                 alt={selectedProduct.name}
-                className="w-full h-full object-cover"
+                className="w-full object-contain max-h-72"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
               {selectedProduct.badge && (
                 <span className={`absolute top-4 left-4 text-xs font-body font-semibold px-3 py-1.5 rounded-full ${selectedProduct.badgeColor}`}>
                   {selectedProduct.badge}
@@ -639,7 +640,7 @@ export default function Index() {
             </div>
 
             <div className="p-6">
-              <div className="mb-4">
+              <div className="mb-3">
                 <h2 className="font-display text-3xl font-bold text-[hsl(var(--foreground))] leading-tight">
                   {selectedProduct.name}
                 </h2>
@@ -652,20 +653,44 @@ export default function Index() {
                 {selectedProduct.description}
               </p>
 
-              <div className="flex items-center justify-between">
-                <span className="font-display text-3xl font-bold text-[hsl(var(--foreground))]">
-                  {selectedProduct.price.toLocaleString("ru-RU")} ₽
-                </span>
-                <button
-                  onClick={() => {
-                    addToCart(selectedProduct);
-                    setSelectedProduct(null);
-                  }}
-                  className="flex items-center gap-2 bg-[hsl(var(--moss))] hover:bg-[hsl(var(--moss-light))] text-white font-body font-semibold px-6 py-3 rounded-full transition-all hover:shadow-lg active:scale-95"
-                >
-                  <Icon name="ShoppingBag" size={16} />
-                  В корзину
-                </button>
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="font-body text-xs text-[hsl(var(--muted-foreground))] mb-1">Итого</p>
+                  <span className="font-display text-3xl font-bold text-[hsl(var(--foreground))]">
+                    {(selectedProduct.price * modalQty).toLocaleString("ru-RU")} ₽
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  {/* Количество */}
+                  <div className="flex items-center gap-2 bg-[hsl(var(--sand))] rounded-full px-2 py-1.5">
+                    <button
+                      onClick={() => setModalQty((q) => Math.max(1, q - 1))}
+                      className="w-7 h-7 rounded-full bg-white border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--muted))] transition-colors"
+                    >
+                      <Icon name="Minus" size={12} />
+                    </button>
+                    <span className="font-body font-semibold text-sm w-5 text-center">{modalQty}</span>
+                    <button
+                      onClick={() => setModalQty((q) => q + 1)}
+                      className="w-7 h-7 rounded-full bg-[hsl(var(--bark))] text-white flex items-center justify-center hover:bg-[hsl(var(--moss))] transition-colors"
+                    >
+                      <Icon name="Plus" size={12} />
+                    </button>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      for (let i = 0; i < modalQty; i++) addToCart(selectedProduct);
+                      setModalQty(1);
+                      setSelectedProduct(null);
+                    }}
+                    className="flex items-center gap-2 bg-[hsl(var(--moss))] hover:bg-[hsl(var(--moss-light))] text-white font-body font-semibold px-5 py-3 rounded-full transition-all hover:shadow-lg active:scale-95"
+                  >
+                    <Icon name="ShoppingBag" size={16} />
+                    В корзину
+                  </button>
+                </div>
               </div>
             </div>
           </div>
