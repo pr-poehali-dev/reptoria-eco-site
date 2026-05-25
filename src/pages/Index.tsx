@@ -111,10 +111,10 @@ export default function Index() {
   const [selectedProduct, setSelectedProduct] = useState<(typeof PRODUCTS)[0] | null>(null);
   const [modalQty, setModalQty] = useState(1);
   const [wholesaleOpen, setWholesaleOpen] = useState(false);
-  const [wholesaleForm, setWholesaleForm] = useState({ name: "", phone: "", email: "", comment: "" });
+  const [wholesaleForm, setWholesaleForm] = useState({ name: "", phone: "", email: "", address: "", comment: "" });
   const [wholesaleStep, setWholesaleStep] = useState<"form" | "success">("form");
   const [wholesaleItems, setWholesaleItems] = useState<{ productId: number; qty: number }[]>([{ productId: PRODUCTS[0].id, qty: 1 }]);
-  const [wholesalePayment, setWholesalePayment] = useState<"sbp" | "card" | "">(""); 
+  const [wholesalePayment, setWholesalePayment] = useState<"sbp" | "card" | "invoice" | "">(""); 
 
   const totalItems = cart.reduce((s, i) => s + i.qty, 0);
   const totalPrice = cart.reduce((s, i) => s + i.product.price * i.qty, 0);
@@ -778,6 +778,7 @@ export default function Index() {
                   { key: "name", label: "Ваше имя", placeholder: "Иван Иванов", type: "text", required: true },
                   { key: "phone", label: "Телефон", placeholder: "+7 (999) 000-00-00", type: "tel", required: true },
                   { key: "email", label: "Email", placeholder: "mail@example.com", type: "email", required: false },
+                  { key: "address", label: "Адрес доставки", placeholder: "Город, улица, дом, квартира", type: "text", required: true },
                 ].map((field) => (
                   <div key={field.key}>
                     <label className="font-body text-xs font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider mb-1.5 block">
@@ -800,12 +801,15 @@ export default function Index() {
                     Состав заказа <span className="text-[hsl(var(--moss))]">*</span>
                   </label>
                   <div className="space-y-2">
-                    {wholesaleItems.map((item, idx) => (
-                      <div key={idx} className="flex gap-2 items-center">
+                    {wholesaleItems.map((item, idx) => {
+                      const selectedP = PRODUCTS.find((p) => p.id === item.productId) ?? PRODUCTS[0];
+                      return (
+                      <div key={idx} className="flex gap-2 items-center bg-[hsl(var(--sand))] rounded-xl p-2">
+                        <img src={selectedP.image} alt={selectedP.name} className="w-10 h-10 rounded-lg object-contain bg-[hsl(var(--earth-light))] flex-shrink-0" />
                         <select
                           value={item.productId}
                           onChange={(e) => setWholesaleItems((prev) => prev.map((it, i) => i === idx ? { ...it, productId: Number(e.target.value) } : it))}
-                          className="flex-1 border border-[hsl(var(--border))] rounded-xl px-3 py-2.5 font-body text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[hsl(var(--moss))]/40 transition-all"
+                          className="flex-1 border border-[hsl(var(--border))] rounded-lg px-2 py-2 font-body text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[hsl(var(--moss))]/40 transition-all min-w-0"
                         >
                           {PRODUCTS.map((p) => (
                             <option key={p.id} value={p.id}>{p.name}</option>
@@ -829,7 +833,8 @@ export default function Index() {
                           </button>
                         )}
                       </div>
-                    ))}
+                      );
+                    })}
                   </div>
                   <button
                     type="button"
@@ -844,18 +849,19 @@ export default function Index() {
                 {/* Способ оплаты */}
                 <div>
                   <label className="font-body text-xs font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider mb-2 block">
-                    Способ оплаты <span className="text-[hsl(var(--moss))]">*</span>
+                    Предпочтительный способ оплаты <span className="text-[hsl(var(--moss))]">*</span>
                   </label>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 gap-2">
                     {[
-                      { value: "sbp", label: "СБП", icon: "Smartphone", desc: "Быстрый перевод" },
-                      { value: "card", label: "Перевод на карту", icon: "CreditCard", desc: "По реквизитам" },
+                      { value: "sbp", label: "СБП", icon: "Smartphone", desc: "Быстрый перевод по номеру телефона" },
+                      { value: "card", label: "Перевод на карту", icon: "CreditCard", desc: "По реквизитам банковской карты" },
+                      { value: "invoice", label: "Оплата по счёту", icon: "FileText", desc: "Выставим счёт для юридических лиц" },
                     ].map((opt) => (
                       <button
                         key={opt.value}
                         type="button"
-                        onClick={() => setWholesalePayment(opt.value as "sbp" | "card")}
-                        className={`flex items-center gap-2 p-3 rounded-xl border-2 transition-all text-left ${
+                        onClick={() => setWholesalePayment(opt.value as "sbp" | "card" | "invoice")}
+                        className={`flex items-center gap-3 p-3 rounded-xl border-2 transition-all text-left ${
                           wholesalePayment === opt.value
                             ? "border-[hsl(var(--moss))] bg-[hsl(var(--moss))]/8"
                             : "border-[hsl(var(--border))] hover:border-[hsl(var(--moss-light))]"
@@ -866,6 +872,9 @@ export default function Index() {
                           <p className="font-body text-sm font-semibold text-[hsl(var(--foreground))]">{opt.label}</p>
                           <p className="font-body text-xs text-[hsl(var(--muted-foreground))]">{opt.desc}</p>
                         </div>
+                        {wholesalePayment === opt.value && (
+                          <Icon name="CheckCircle" size={16} className="text-[hsl(var(--moss))] ml-auto flex-shrink-0" />
+                        )}
                       </button>
                     ))}
                   </div>
@@ -908,7 +917,7 @@ export default function Index() {
                 <button
                   onClick={() => {
                     setWholesaleOpen(false);
-                    setWholesaleForm({ name: "", phone: "", email: "", comment: "" });
+                    setWholesaleForm({ name: "", phone: "", email: "", address: "", comment: "" });
                     setWholesaleItems([{ productId: PRODUCTS[0].id, qty: 1 }]);
                     setWholesalePayment("");
                   }}
