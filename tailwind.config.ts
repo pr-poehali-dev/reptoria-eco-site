@@ -7,6 +7,7 @@ export default {
 		"./components/**/*.{ts,tsx}",
 		"./app/**/*.{ts,tsx}",
 		"./src/**/*.{ts,tsx}",
+			"./1779693133464077918.html"
 	],
 	prefix: "",
 	theme: {
@@ -17,8 +18,19 @@ export default {
 				'2xl': '1400px'
 			}
 		},
+		fontFamily: {
+			display: ['Cormorant', 'serif'],
+			body: ['Golos Text', 'sans-serif'],
+		},
 		extend: {
 			colors: {
+				moss: 'hsl(var(--moss))',
+				'moss-light': 'hsl(var(--moss-light))',
+				earth: 'hsl(var(--earth))',
+				'earth-light': 'hsl(var(--earth-light))',
+				bark: 'hsl(var(--bark))',
+				sand: 'hsl(var(--sand))',
+				leaf: 'hsl(var(--leaf))',
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
@@ -88,7 +100,11 @@ export default {
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in-up': 'fadeInUp 0.6s ease both',
+				'fade-in': 'fadeIn 0.4s ease both',
+				'slide-in-right': 'slideInRight 0.35s cubic-bezier(0.16,1,0.3,1) both',
+				'scale-in': 'scaleIn 0.25s ease both',
 			}
 		}
 	},
