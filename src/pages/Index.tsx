@@ -105,6 +105,7 @@ export default function Index() {
   const [checkoutStep, setCheckoutStep] = useState<CheckoutStep>("cart");
   const [form, setForm] = useState({ name: "", phone: "", email: "", address: "", comment: "" });
   const [addedId, setAddedId] = useState<number | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<(typeof PRODUCTS)[0] | null>(null);
 
   const totalItems = cart.reduce((s, i) => s + i.qty, 0);
   const totalPrice = cart.reduce((s, i) => s + i.product.price * i.qty, 0);
@@ -244,7 +245,8 @@ export default function Index() {
           {group.products.map((product, i) => (
             <div
               key={product.id}
-              className="group bg-white rounded-2xl overflow-hidden border border-[hsl(var(--border))] hover:border-[hsl(var(--moss-light))] hover:shadow-xl transition-all duration-300 animate-fade-in-up"
+              onClick={() => setSelectedProduct(product)}
+              className="group bg-white rounded-2xl overflow-hidden border border-[hsl(var(--border))] hover:border-[hsl(var(--moss-light))] hover:shadow-xl transition-all duration-300 animate-fade-in-up cursor-pointer"
               style={{ animationDelay: `${i * 0.07}s` }}
             >
               <div className="relative overflow-hidden h-52">
@@ -280,7 +282,7 @@ export default function Index() {
                     {product.price.toLocaleString("ru-RU")} ₽
                   </span>
                   <button
-                    onClick={() => addToCart(product)}
+                    onClick={(e) => { e.stopPropagation(); addToCart(product); }}
                     className={`flex items-center gap-2 px-4 py-2.5 rounded-full font-body text-sm font-medium transition-all active:scale-95 ${
                       addedId === product.id
                         ? "bg-[hsl(var(--moss))] text-white scale-95"
@@ -601,6 +603,71 @@ export default function Index() {
                 </button>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* ── PRODUCT MODAL ── */}
+      {selectedProduct && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in"
+            onClick={() => setSelectedProduct(null)}
+          />
+          <div className="relative z-10 bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden animate-scale-in">
+            <div className="relative h-64 overflow-hidden">
+              <img
+                src={selectedProduct.image}
+                alt={selectedProduct.name}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+              {selectedProduct.badge && (
+                <span className={`absolute top-4 left-4 text-xs font-body font-semibold px-3 py-1.5 rounded-full ${selectedProduct.badgeColor}`}>
+                  {selectedProduct.badge}
+                </span>
+              )}
+              <button
+                onClick={() => setSelectedProduct(null)}
+                className="absolute top-4 right-4 w-9 h-9 bg-white/90 hover:bg-white rounded-full flex items-center justify-center transition-all shadow-md"
+              >
+                <Icon name="X" size={18} className="text-[hsl(var(--foreground))]" />
+              </button>
+              <span className="absolute bottom-4 left-4 bg-white/90 text-[hsl(var(--muted-foreground))] text-xs font-body px-2.5 py-1 rounded-full">
+                {selectedProduct.category}
+              </span>
+            </div>
+
+            <div className="p-6">
+              <div className="mb-4">
+                <h2 className="font-display text-3xl font-bold text-[hsl(var(--foreground))] leading-tight">
+                  {selectedProduct.name}
+                </h2>
+                <p className="font-body text-sm text-[hsl(var(--moss-light))] font-medium mt-1">
+                  {selectedProduct.subtitle} · {selectedProduct.unit}
+                </p>
+              </div>
+
+              <p className="font-body text-sm text-[hsl(var(--muted-foreground))] leading-relaxed mb-6">
+                {selectedProduct.description}
+              </p>
+
+              <div className="flex items-center justify-between">
+                <span className="font-display text-3xl font-bold text-[hsl(var(--foreground))]">
+                  {selectedProduct.price.toLocaleString("ru-RU")} ₽
+                </span>
+                <button
+                  onClick={() => {
+                    addToCart(selectedProduct);
+                    setSelectedProduct(null);
+                  }}
+                  className="flex items-center gap-2 bg-[hsl(var(--moss))] hover:bg-[hsl(var(--moss-light))] text-white font-body font-semibold px-6 py-3 rounded-full transition-all hover:shadow-lg active:scale-95"
+                >
+                  <Icon name="ShoppingBag" size={16} />
+                  В корзину
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
