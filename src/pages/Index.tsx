@@ -1,80 +1,96 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
 
-const PRODUCTS = [
+const GROUPS = [
   {
-    id: 1,
-    name: "Кальций Форте",
-    subtitle: "Без витамина D3",
-    description: "Чистый карбонат кальция для укрепления костей и панциря. Идеален для бородатых агам и черепах.",
-    price: 590,
-    unit: "150 г",
-    image: "https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/files/d2e8a837-2df7-4a68-9a76-fadb6ff32b81.jpg",
-    badge: "Хит",
-    badgeColor: "bg-[hsl(var(--moss))] text-[hsl(var(--primary-foreground))]",
-    category: "Минералы",
+    id: "reptiles",
+    title: "Кальций и витамины для рептилий",
+    emoji: "🦎",
+    products: [
+      {
+        id: 1,
+        name: "Кальций Форте",
+        subtitle: "Без витамина D3",
+        description: "Чистый карбонат кальция для укрепления костей и панциря. Идеален для бородатых агам и черепах.",
+        price: 590,
+        unit: "150 г",
+        image: "https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/files/d2e8a837-2df7-4a68-9a76-fadb6ff32b81.jpg",
+        badge: "Хит",
+        badgeColor: "bg-[hsl(var(--moss))] text-[hsl(var(--primary-foreground))]",
+        category: "Минералы",
+      },
+      {
+        id: 2,
+        name: "Витамин D3",
+        subtitle: "Капли в масле",
+        description: "Концентрированный витамин D3 для рептилий без доступа к УФ-свету. Дозатор для точного дозирования.",
+        price: 890,
+        unit: "30 мл",
+        image: "https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/files/3e689652-ab18-4a3a-8208-95729f1afb34.jpg",
+        badge: "Новинка",
+        badgeColor: "bg-[hsl(var(--earth))] text-white",
+        category: "Витамины",
+      },
+      {
+        id: 3,
+        name: "МультиВит Рептил",
+        subtitle: "Комплекс витаминов",
+        description: "Полный витаминно-минеральный комплекс для всех видов рептилий. 12 витаминов + 8 минералов.",
+        price: 1190,
+        unit: "100 капсул",
+        image: "https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/files/68bfc352-33c2-423d-947f-0b20ba4a79fd.jpg",
+        badge: null,
+        badgeColor: "",
+        category: "Комплексы",
+      },
+    ],
   },
   {
-    id: 2,
-    name: "Витамин D3",
-    subtitle: "Капли в масле",
-    description: "Концентрированный витамин D3 для рептилий без доступа к УФ-свету. Дозатор для точного дозирования.",
-    price: 890,
-    unit: "30 мл",
-    image: "https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/files/3e689652-ab18-4a3a-8208-95729f1afb34.jpg",
-    badge: "Новинка",
-    badgeColor: "bg-[hsl(var(--earth))] text-white",
-    category: "Витамины",
-  },
-  {
-    id: 3,
-    name: "МультиВит Рептил",
-    subtitle: "Комплекс витаминов",
-    description: "Полный витаминно-минеральный комплекс для всех видов рептилий. 12 витаминов + 8 минералов.",
-    price: 1190,
-    unit: "100 капсул",
-    image: "https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/files/68bfc352-33c2-423d-947f-0b20ba4a79fd.jpg",
-    badge: null,
-    badgeColor: "",
-    category: "Комплексы",
-  },
-  {
-    id: 4,
-    name: "Кальций + D3",
-    subtitle: "Синергетическая формула",
-    description: "Оптимальное сочетание кальция и D3 для максимального усвоения. Незаменим в сезон роста.",
-    price: 750,
-    unit: "120 г",
-    image: "https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/files/d2e8a837-2df7-4a68-9a76-fadb6ff32b81.jpg",
-    badge: null,
-    badgeColor: "",
-    category: "Минералы",
-  },
-  {
-    id: 5,
-    name: "Пробиотик Рептил",
-    subtitle: "Здоровье кишечника",
-    description: "Специализированный пробиотик для нормализации пищеварения рептилий после стресса или антибиотиков.",
-    price: 1350,
-    unit: "60 капсул",
-    image: "https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/files/68bfc352-33c2-423d-947f-0b20ba4a79fd.jpg",
-    badge: "Топ",
-    badgeColor: "bg-[hsl(var(--leaf))] text-white",
-    category: "Пробиотики",
-  },
-  {
-    id: 6,
-    name: "ВитаМинс Drops",
-    subtitle: "Жидкий комплекс",
-    description: "Жидкие витамины для удобного нанесения на корм. Быстрое усвоение, нейтральный вкус.",
-    price: 980,
-    unit: "50 мл",
-    image: "https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/files/3e689652-ab18-4a3a-8208-95729f1afb34.jpg",
-    badge: null,
-    badgeColor: "",
-    category: "Витамины",
+    id: "others",
+    title: "Товары для других питомцев",
+    emoji: "🐾",
+    products: [
+      {
+        id: 4,
+        name: "Кальций + D3",
+        subtitle: "Для грызунов и кроликов",
+        description: "Оптимальное сочетание кальция и D3 для максимального усвоения. Подходит для мелких млекопитающих.",
+        price: 750,
+        unit: "120 г",
+        image: "https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/files/d2e8a837-2df7-4a68-9a76-fadb6ff32b81.jpg",
+        badge: null,
+        badgeColor: "",
+        category: "Минералы",
+      },
+      {
+        id: 5,
+        name: "Пробиотик Универсал",
+        subtitle: "Здоровье кишечника",
+        description: "Специализированный пробиотик для нормализации пищеварения после стресса или антибиотиков. Для всех питомцев.",
+        price: 1350,
+        unit: "60 капсул",
+        image: "https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/files/68bfc352-33c2-423d-947f-0b20ba4a79fd.jpg",
+        badge: "Топ",
+        badgeColor: "bg-[hsl(var(--leaf))] text-white",
+        category: "Пробиотики",
+      },
+      {
+        id: 6,
+        name: "ВитаМинс Drops",
+        subtitle: "Жидкий комплекс",
+        description: "Жидкие витамины для удобного нанесения на корм. Быстрое усвоение, нейтральный вкус. Для птиц и грызунов.",
+        price: 980,
+        unit: "50 мл",
+        image: "https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/files/3e689652-ab18-4a3a-8208-95729f1afb34.jpg",
+        badge: null,
+        badgeColor: "",
+        category: "Витамины",
+      },
+    ],
   },
 ];
+
+const PRODUCTS = GROUPS.flatMap((g) => g.products);
 
 interface CartItem {
   product: (typeof PRODUCTS)[0];
@@ -210,14 +226,22 @@ export default function Index() {
       </section>
 
       {/* ── PRODUCTS GRID ── */}
-      <section id="products" className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
-        <div className="flex items-baseline justify-between mb-8">
+      <section id="products" className="max-w-6xl mx-auto px-4 sm:px-6 py-14 space-y-14">
+        <div className="flex items-baseline justify-between">
           <h2 className="font-display text-4xl font-bold text-[hsl(var(--foreground))]">Все товары</h2>
           <span className="font-body text-sm text-[hsl(var(--muted-foreground))]">{PRODUCTS.length} товаров</span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {PRODUCTS.map((product, i) => (
+        {GROUPS.map((group) => (
+          <div key={group.id}>
+            <div className="flex items-center gap-3 mb-6">
+              <span className="text-2xl">{group.emoji}</span>
+              <h3 className="font-display text-2xl font-semibold text-[hsl(var(--foreground))]">{group.title}</h3>
+              <div className="flex-1 h-px bg-[hsl(var(--border))] ml-2" />
+              <span className="font-body text-xs text-[hsl(var(--muted-foreground))]">{group.products.length} товара</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {group.products.map((product, i) => (
             <div
               key={product.id}
               className="group bg-white rounded-2xl overflow-hidden border border-[hsl(var(--border))] hover:border-[hsl(var(--moss-light))] hover:shadow-xl transition-all duration-300 animate-fade-in-up"
@@ -279,7 +303,9 @@ export default function Index() {
               </div>
             </div>
           ))}
-        </div>
+            </div>
+          </div>
+        ))}
       </section>
 
       {/* ── ABOUT ── */}
