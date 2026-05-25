@@ -228,7 +228,7 @@ export default function Index() {
       </section>
 
       {/* ── PRODUCTS GRID ── */}
-      <section id="products" className="max-w-6xl mx-auto px-4 sm:px-6 py-14 space-y-14">
+      <section id="products" className="max-w-screen-xl mx-auto px-4 sm:px-6 py-14 space-y-14">
         <div className="flex items-baseline justify-between">
           <h2 className="font-display text-4xl font-bold text-[hsl(var(--foreground))]">Все товары</h2>
           <span className="font-body text-sm text-[hsl(var(--muted-foreground))]">{PRODUCTS.length} товаров</span>
@@ -242,7 +242,7 @@ export default function Index() {
               <div className="flex-1 h-px bg-[hsl(var(--border))] ml-2" />
               <span className="font-body text-xs text-[hsl(var(--muted-foreground))]">{group.products.length} товара</span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {group.products.map((product, i) => (
             <div
               key={product.id}
