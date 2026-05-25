@@ -250,11 +250,11 @@ export default function Index() {
               className="group bg-white rounded-2xl overflow-hidden border border-[hsl(var(--border))] hover:border-[hsl(var(--moss-light))] hover:shadow-xl transition-all duration-300 animate-fade-in-up cursor-pointer"
               style={{ animationDelay: `${i * 0.07}s` }}
             >
-              <div className="relative overflow-hidden h-52">
+              <div className="relative overflow-hidden h-52 bg-[hsl(var(--sand))]">
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                 />
                 {product.badge && (
                   <span className={`absolute top-3 left-3 text-xs font-body font-semibold px-2.5 py-1 rounded-full ${product.badgeColor}`}>
@@ -351,9 +351,8 @@ export default function Index() {
       <section id="delivery" className="py-16 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <h2 className="font-display text-4xl font-bold text-center mb-10 text-[hsl(var(--foreground))]">Доставка и оплата</h2>
-          <div className="grid sm:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 gap-6">
             {[
-              { icon: "Package", title: "Курьером по Москве", text: "1–2 дня · от 350 ₽\nПри заказе от 2500 ₽ — бесплатно" },
               { icon: "Truck", title: "По России (СДЭК)", text: "2–5 дней · от 250 ₽\nПри заказе от 3000 ₽ — бесплатно" },
               { icon: "CreditCard", title: "Оплата", text: "Картой онлайн, СБП,\nналичными при получении" },
             ].map((item) => (
@@ -378,7 +377,7 @@ export default function Index() {
             <span className="text-xl">🦎</span>
             <span className="font-display text-xl font-bold text-white">РепТория</span>
           </div>
-          <p className="font-body text-sm text-center">© 2024 РепТория · Добавки для рептилий</p>
+          <p className="font-body text-sm text-center">© 2026 РепТория · Добавки для рептилий</p>
           <div className="flex gap-4 font-body text-sm">
             <a href="#" className="hover:text-white transition-colors">Telegram</a>
             <a href="#" className="hover:text-white transition-colors">ВКонтакте</a>
