@@ -55,12 +55,12 @@ const GROUPS = [
     products: [
       {
         id: 4,
-        name: "Кальций + D3",
-        subtitle: "Для грызунов и кроликов",
+        name: 'Добавка "ТАЙПЕТЦ" для кошек и собак',
+        subtitle: "Для кошек и собак",
         description: "Оптимальное сочетание кальция и D3 для максимального усвоения. Подходит для мелких млекопитающих.",
-        price: 750,
-        unit: "120 г",
-        image: "https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/files/d2e8a837-2df7-4a68-9a76-fadb6ff32b81.jpg",
+        price: 500,
+        unit: "100 г",
+        image: "https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/bucket/965573ad-cff5-41a3-99b9-8aa5c2f6ead1.jpg",
         badge: null,
         badgeColor: "",
         category: "Минералы",
