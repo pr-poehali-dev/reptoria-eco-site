@@ -247,10 +247,10 @@ export default function Index() {
             <div
               key={product.id}
               onClick={() => { setSelectedProduct(product); setModalQty(1); }}
-              className="group bg-white rounded-2xl overflow-hidden border border-[hsl(var(--border))] hover:border-[hsl(var(--moss-light))] hover:shadow-xl transition-all duration-300 animate-fade-in-up cursor-pointer"
+              className="group bg-[hsl(var(--sand))] rounded-2xl overflow-hidden border border-transparent hover:border-[hsl(var(--moss-light))] hover:shadow-xl transition-all duration-300 animate-fade-in-up cursor-pointer"
               style={{ animationDelay: `${i * 0.07}s` }}
             >
-              <div className="relative overflow-hidden h-52 bg-[hsl(var(--sand))]">
+              <div className="relative overflow-hidden h-52 bg-[hsl(var(--earth-light))]">
                 <img
                   src={product.image}
                   alt={product.name}
@@ -266,16 +266,16 @@ export default function Index() {
                 </span>
               </div>
 
-              <div className="p-5">
+              <div className="p-5 bg-[hsl(var(--sand))]">
                 <div className="mb-3">
-                  <h3 className="font-display text-xl font-semibold text-[hsl(var(--foreground))] leading-tight">
+                  <h3 className="font-display text-xl font-semibold text-[hsl(var(--bark))] leading-tight">
                     {product.name}
                   </h3>
                   <p className="font-body text-xs text-[hsl(var(--moss-light))] font-medium mt-0.5">
                     {product.subtitle} · {product.unit}
                   </p>
                 </div>
-                <p className="font-body text-sm text-[hsl(var(--muted-foreground))] leading-relaxed mb-5 line-clamp-2">
+                <p className="font-body text-sm text-[hsl(var(--earth))] leading-relaxed mb-5 line-clamp-2">
                   {product.description}
                 </p>
                 <div className="flex items-center justify-between">
