@@ -33,12 +33,13 @@ const GROUPS = [
       },
       {
         id: 3,
-        name: "МультиВит Рептил",
-        subtitle: "Комплекс витаминов",
-        description: "Полный витаминно-минеральный комплекс для всех видов рептилий. 12 витаминов + 8 минералов.",
-        price: 1190,
-        unit: "100 капсул",
-        image: "https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/files/68bfc352-33c2-423d-947f-0b20ba4a79fd.jpg",
+        name: "Кальций РепТория с микронутриентами",
+        subtitle: "Кальций с комплексом витаминов",
+        description: "Универсальная добавка для рептилий с кальцием и микроэлементами. Поддерживает здоровье костей, укрепляет иммунитет. Баланс витаминов и среднее содержание D3. Подходит для всех видов рептилий. Дополнительно перемешивать с витаминами не требуется.",
+        price: 850,
+        priceWholesale: 750,
+        unit: "100 г",
+        image: "https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/bucket/575828f7-8175-4534-9395-28e8a4ed32fa.jpg",
         badge: null,
         badgeColor: "",
         category: "Комплексы",
@@ -279,9 +280,16 @@ export default function Index() {
                   {product.description}
                 </p>
                 <div className="flex items-center justify-between">
-                  <span className="font-display text-3xl font-bold text-[hsl(var(--foreground))]">
-                    {product.price.toLocaleString("ru-RU")} ₽
-                  </span>
+                  <div>
+                    <span className="font-display text-3xl font-bold text-[hsl(var(--foreground))]">
+                      {product.price.toLocaleString("ru-RU")} ₽
+                    </span>
+                    {"priceWholesale" in product && (
+                      <p className="font-body text-xs text-[hsl(var(--moss))] font-medium mt-0.5">
+                        {(product as { priceWholesale: number }).priceWholesale} ₽ · от 3 шт
+                      </p>
+                    )}
+                  </div>
                   <button
                     onClick={(e) => { e.stopPropagation(); addToCart(product); }}
                     className={`flex items-center gap-2 px-5 py-3 rounded-full font-body text-base font-medium transition-all active:scale-95 ${
@@ -652,11 +660,22 @@ export default function Index() {
                 {selectedProduct.description}
               </p>
 
+              {("priceWholesale" in selectedProduct) && (
+                <div className={`mb-4 px-4 py-2.5 rounded-xl text-sm font-body transition-all ${modalQty >= 3 ? "bg-[hsl(var(--moss))]/15 text-[hsl(var(--moss))]" : "bg-[hsl(var(--sand))] text-[hsl(var(--muted-foreground))]"}`}>
+                  {modalQty >= 3
+                    ? `🎉 Скидка применена — ${(selectedProduct as { priceWholesale: number }).priceWholesale} ₽/шт при покупке от 3 шт`
+                    : `💡 Купите от 3 шт — цена ${(selectedProduct as { priceWholesale: number }).priceWholesale} ₽/шт`}
+                </div>
+              )}
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <p className="font-body text-xs text-[hsl(var(--muted-foreground))] mb-1">Итого</p>
                   <span className="font-display text-3xl font-bold text-[hsl(var(--foreground))]">
-                    {(selectedProduct.price * modalQty).toLocaleString("ru-RU")} ₽
+                    {(() => {
+                      const pw = "priceWholesale" in selectedProduct ? (selectedProduct as { priceWholesale: number }).priceWholesale : null;
+                      const unitPrice = pw && modalQty >= 3 ? pw : selectedProduct.price;
+                      return (unitPrice * modalQty).toLocaleString("ru-RU");
+                    })()} ₽
                   </span>
                 </div>
 
