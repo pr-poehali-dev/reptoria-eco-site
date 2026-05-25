@@ -110,6 +110,9 @@ export default function Index() {
   const [addedId, setAddedId] = useState<number | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<(typeof PRODUCTS)[0] | null>(null);
   const [modalQty, setModalQty] = useState(1);
+  const [wholesaleOpen, setWholesaleOpen] = useState(false);
+  const [wholesaleForm, setWholesaleForm] = useState({ name: "", phone: "", email: "", comment: "" });
+  const [wholesaleStep, setWholesaleStep] = useState<"form" | "success">("form");
 
   const totalItems = cart.reduce((s, i) => s + i.qty, 0);
   const totalPrice = cart.reduce((s, i) => s + i.product.price * i.qty, 0);
@@ -729,6 +732,106 @@ export default function Index() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── FLOATING WHOLESALE BUTTON ── */}
+      <button
+        onClick={() => { setWholesaleOpen(true); setWholesaleStep("form"); }}
+        className="fixed bottom-6 right-6 z-40 bg-[hsl(var(--earth))] hover:bg-[hsl(var(--bark))] text-white font-body font-bold text-sm px-5 py-3.5 rounded-full shadow-2xl transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
+      >
+        <Icon name="Package" size={16} />
+        ЗАКАЗАТЬ ОПТОМ
+      </button>
+
+      {/* ── WHOLESALE MODAL ── */}
+      {wholesaleOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in"
+            onClick={() => setWholesaleOpen(false)}
+          />
+          <div className="relative z-10 bg-white rounded-3xl shadow-2xl max-w-md w-full animate-scale-in">
+            <div className="bg-[hsl(var(--bark))] rounded-t-3xl px-6 py-5 flex items-center justify-between">
+              <div>
+                <h2 className="font-display text-2xl font-bold text-white">Оптовый заказ</h2>
+                <p className="font-body text-xs text-white/60 mt-0.5">Оставьте заявку — свяжемся в течение часа</p>
+              </div>
+              <button
+                onClick={() => setWholesaleOpen(false)}
+                className="w-8 h-8 bg-white/15 hover:bg-white/25 rounded-full flex items-center justify-center transition-colors"
+              >
+                <Icon name="X" size={16} className="text-white" />
+              </button>
+            </div>
+
+            {wholesaleStep === "form" ? (
+              <form
+                onSubmit={(e) => { e.preventDefault(); setWholesaleStep("success"); }}
+                className="p-6 space-y-4"
+              >
+                {[
+                  { key: "name", label: "Ваше имя", placeholder: "Иван Иванов", type: "text", required: true },
+                  { key: "phone", label: "Телефон", placeholder: "+7 (999) 000-00-00", type: "tel", required: true },
+                  { key: "email", label: "Email", placeholder: "mail@example.com", type: "email", required: false },
+                ].map((field) => (
+                  <div key={field.key}>
+                    <label className="font-body text-xs font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider mb-1.5 block">
+                      {field.label} {field.required && <span className="text-[hsl(var(--moss))]">*</span>}
+                    </label>
+                    <input
+                      type={field.type}
+                      required={field.required}
+                      placeholder={field.placeholder}
+                      value={wholesaleForm[field.key as keyof typeof wholesaleForm]}
+                      onChange={(e) => setWholesaleForm((f) => ({ ...f, [field.key]: e.target.value }))}
+                      className="w-full border border-[hsl(var(--border))] rounded-xl px-4 py-3 font-body text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[hsl(var(--moss))]/40 focus:border-[hsl(var(--moss-light))] transition-all"
+                    />
+                  </div>
+                ))}
+                <div>
+                  <label className="font-body text-xs font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider mb-1.5 block">
+                    Состав заказа / комментарий
+                  </label>
+                  <textarea
+                    placeholder="Например: Кальций без Д3 — 50 шт, Кальций с Д3 — 30 шт..."
+                    value={wholesaleForm.comment}
+                    onChange={(e) => setWholesaleForm((f) => ({ ...f, comment: e.target.value }))}
+                    rows={3}
+                    className="w-full border border-[hsl(var(--border))] rounded-xl px-4 py-3 font-body text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[hsl(var(--moss))]/40 focus:border-[hsl(var(--moss-light))] transition-all resize-none"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full bg-[hsl(var(--earth))] hover:bg-[hsl(var(--bark))] text-white font-body font-bold py-3.5 rounded-full transition-all hover:shadow-lg active:scale-[0.98] mt-2"
+                >
+                  Отправить заявку
+                </button>
+                <p className="font-body text-xs text-[hsl(var(--muted-foreground))] text-center">
+                  Нажимая кнопку, вы соглашаетесь с обработкой персональных данных
+                </p>
+              </form>
+            ) : (
+              <div className="p-8 flex flex-col items-center text-center animate-scale-in">
+                <div className="w-16 h-16 bg-[hsl(var(--moss))]/15 rounded-full flex items-center justify-center mb-4">
+                  <Icon name="CheckCircle" size={36} className="text-[hsl(var(--moss))]" />
+                </div>
+                <h3 className="font-display text-2xl font-bold text-[hsl(var(--foreground))] mb-2">Заявка отправлена!</h3>
+                <p className="font-body text-sm text-[hsl(var(--muted-foreground))] mb-6 leading-relaxed">
+                  Спасибо, {wholesaleForm.name || "друг"}! Мы свяжемся с вами в ближайшее время для обсуждения условий оптовой поставки.
+                </p>
+                <button
+                  onClick={() => {
+                    setWholesaleOpen(false);
+                    setWholesaleForm({ name: "", phone: "", email: "", comment: "" });
+                  }}
+                  className="bg-[hsl(var(--bark))] text-white font-body font-semibold px-8 py-3 rounded-full hover:bg-[hsl(var(--moss))] transition-all"
+                >
+                  Закрыть
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
