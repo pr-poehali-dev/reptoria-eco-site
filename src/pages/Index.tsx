@@ -230,15 +230,15 @@ export default function Index() {
       {/* ── PRODUCTS GRID ── */}
       <section id="products" className="max-w-screen-xl mx-auto px-4 sm:px-6 py-14 space-y-14">
         <div className="flex items-baseline justify-between">
-          <h2 className="font-display text-4xl font-bold text-[hsl(var(--foreground))]">Все товары</h2>
+          <h2 className="font-display text-6xl font-bold text-[hsl(var(--foreground))]">Все товары</h2>
           <span className="font-body text-sm text-[hsl(var(--muted-foreground))]">{PRODUCTS.length} товаров</span>
         </div>
 
         {GROUPS.map((group) => (
           <div key={group.id}>
             <div className="flex items-center gap-3 mb-6">
-              <span className="text-2xl">{group.emoji}</span>
-              <h3 className="font-display text-2xl font-semibold text-[hsl(var(--foreground))]">{group.title}</h3>
+              <span className="text-4xl">{group.emoji}</span>
+              <h3 className="font-display text-4xl font-semibold text-[hsl(var(--foreground))]">{group.title}</h3>
               <div className="flex-1 h-px bg-[hsl(var(--border))] ml-2" />
               <span className="font-body text-xs text-[hsl(var(--muted-foreground))]">{group.products.length} товара</span>
             </div>
