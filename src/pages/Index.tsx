@@ -126,8 +126,20 @@ export default function Index() {
       prev.map((i) => (i.product.id === id ? { ...i, qty: Math.max(0, i.qty + delta) } : i)).filter((i) => i.qty > 0)
     );
 
-  const handleOrder = (e: React.FormEvent) => {
+  const SEND_ORDER_URL = "https://functions.poehali.dev/85bdf496-73ad-406c-ae30-9d970a15c06a";
+
+  const handleOrder = async (e: React.FormEvent) => {
     e.preventDefault();
+    const items = cart.map((i) => ({
+      name: i.product.name,
+      qty: i.qty,
+      total: i.product.price * i.qty,
+    }));
+    await fetch(SEND_ORDER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ type: "order", ...form, items, total: totalPrice }),
+    }).catch(() => {});
     setCheckoutStep("success");
   };
 
@@ -760,7 +772,19 @@ export default function Index() {
 
             {wholesaleStep === "form" ? (
               <form
-                onSubmit={(e) => { e.preventDefault(); setWholesaleStep("success"); }}
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  const items = wholesaleItems.map((wi) => {
+                    const p = PRODUCTS.find((p) => p.id === wi.productId);
+                    return { name: p?.name ?? "", qty: wi.qty };
+                  });
+                  await fetch(SEND_ORDER_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ type: "wholesale", ...wholesaleForm, items, payment: wholesalePayment }),
+                  }).catch(() => {});
+                  setWholesaleStep("success");
+                }}
                 className="p-6 space-y-4 overflow-y-auto max-h-[75vh]"
               >
                 {/* Контакты */}
