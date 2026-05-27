@@ -232,8 +232,7 @@ export default function ProductsSection({ addedId, cart, onAddToCart, onUpdateQt
                 />
               </div>
               <div className="absolute -bottom-4 -left-4 bg-[hsl(var(--moss))] text-white rounded-2xl p-4 shadow-xl">
-                <div className="font-display text-3xl font-bold">5+</div>
-                <div className="font-body text-xs text-white/80">лет опыта</div>
+                <Icon name="Heart" size={32} className="text-white" />
               </div>
             </div>
           </div>
