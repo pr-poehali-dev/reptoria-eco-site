@@ -91,6 +91,19 @@ const GROUPS = [
         badgeColor: "",
         category: "Корм",
       },
+      {
+        id: 7,
+        name: "Корм для рыб tetramin flakes 120мл",
+        subtitle: "Для декоративных рыб и улиток",
+        description: "Корм TetraMin Flakes создан специально для декоративных рыб и улиток, обеспечивая сбалансированное питание. Мелкий порошок легко растворяется, минимизируя загрязнение воды, а натуральные компоненты поддерживают здоровье животных.\n\nПродукт подходит для большинства аквариумных обитателей, включая мелких рыбок и ракообразных. Компактная упаковка удобна для хранения и позволяет экономно расходовать средство.",
+        price: 440,
+        priceWholesale: 360,
+        unit: "Банка 120мл",
+        image: "https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/bucket/b54459ef-3b86-41e1-9959-63b9958f7a97.jpg",
+        badge: null,
+        badgeColor: "",
+        category: "Корм",
+      },
     ],
   },
 ];
@@ -264,7 +277,7 @@ export default function Index() {
               <div className="flex-1 h-px bg-[hsl(var(--border))] ml-2" />
               <span className="font-body text-xs text-[hsl(var(--muted-foreground))]">{group.products.length} товара</span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className={`grid gap-6 ${group.id === "others" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"}`}>
           {group.products.map((product, i) => (
             <div
               key={product.id}
