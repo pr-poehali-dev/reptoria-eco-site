@@ -222,10 +222,13 @@ export default function ProductsSection({ addedId, cart, onAddToCart, onUpdateQt
 
             <div className="relative">
               <div className="aspect-square rounded-3xl overflow-hidden">
-                <img
-                  src="https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/files/34d95f24-8af8-49c2-85e7-715dd5001bfc.jpg"
-                  alt="О нас"
+                <video
+                  src="https://cdn.poehali.dev/projects/50ec4a8f-91ec-444c-837d-30283d595bcd/bucket/933c1e91-424d-437f-84c9-0e345166fb3e.mp4"
                   className="w-full h-full object-cover"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
                 />
               </div>
               <div className="absolute -bottom-4 -left-4 bg-[hsl(var(--moss))] text-white rounded-2xl p-4 shadow-xl">
