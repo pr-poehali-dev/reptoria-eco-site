@@ -214,7 +214,16 @@ export default function WholesaleModal({
                               className="w-6 h-6 rounded-full bg-white border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--muted))] transition-colors">
                               <Icon name="Minus" size={11} />
                             </button>
-                            <span className="font-body text-sm font-semibold w-7 text-center">{item.qty}</span>
+                            <input
+                              type="number"
+                              min={1}
+                              value={item.qty}
+                              onChange={(e) => {
+                                const val = Math.max(1, parseInt(e.target.value) || 1);
+                                onWholesaleItemsChange(wholesaleItems.map((it, i) => i === idx ? { ...it, qty: val } : it));
+                              }}
+                              className="font-body text-sm font-semibold w-10 text-center bg-white border border-[hsl(var(--border))] rounded-lg py-0.5 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--moss))]/40"
+                            />
                             <button type="button" onClick={() => onWholesaleItemsChange(wholesaleItems.map((it, i) => i === idx ? { ...it, qty: it.qty + 1 } : it))}
                               className="w-6 h-6 rounded-full bg-[hsl(var(--bark))] text-white flex items-center justify-center hover:bg-[hsl(var(--moss))] transition-colors">
                               <Icon name="Plus" size={11} />
