@@ -1,3 +1,5 @@
 {
+  "robokassa-robokassa-webhook": "https://functions.poehali.dev/9851fa3f-25dc-4689-86a9-f6cacd2086f2",
+  "robokassa-robokassa": "https://functions.poehali.dev/36c7b154-fbd3-426b-ab33-8abc304a6e42",
   "send-order": "https://functions.poehali.dev/85bdf496-73ad-406c-ae30-9d970a15c06a"
 }

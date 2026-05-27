@@ -5,6 +5,24 @@
       "method": "OPTIONS",
       "path": "/",
       "expectedStatus": 200
+    },
+    {
+      "name": "Тестовое письмо",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "type": "order",
+        "name": "Тест",
+        "phone": "+70000000000",
+        "email": "test@test.ru",
+        "address": "Тестовый адрес",
+        "comment": "Тестовое сообщение",
+        "items": [{"name": "Тестовый товар", "qty": 1, "total": 100}],
+        "total": 100
+      },
+      "expectedStatus": 200,
+      "expectedBody": {"ok": true},
+      "bodyMatcher": "partial"
     }
   ]
 }
