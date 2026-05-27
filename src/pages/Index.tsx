@@ -91,7 +91,9 @@ export default function Index() {
 
       <ProductsSection
         addedId={addedId}
+        cart={cart}
         onAddToCart={addToCart}
+        onUpdateQty={updateQty}
         onProductClick={(product) => { setSelectedProduct(product); setModalQty(1); }}
       />
 

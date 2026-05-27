@@ -1,13 +1,20 @@
 import Icon from "@/components/ui/icon";
 import { GROUPS, PRODUCTS } from "@/data/products";
 
+interface CartItem {
+  product: (typeof PRODUCTS)[0];
+  qty: number;
+}
+
 interface ProductsSectionProps {
   addedId: number | null;
+  cart: CartItem[];
   onAddToCart: (product: (typeof PRODUCTS)[0]) => void;
+  onUpdateQty: (id: number, delta: number) => void;
   onProductClick: (product: (typeof PRODUCTS)[0]) => void;
 }
 
-export default function ProductsSection({ addedId, onAddToCart, onProductClick }: ProductsSectionProps) {
+export default function ProductsSection({ addedId, cart, onAddToCart, onUpdateQty, onProductClick }: ProductsSectionProps) {
   return (
     <>
       {/* ── HERO ── */}
@@ -123,26 +130,55 @@ export default function ProductsSection({ addedId, onAddToCart, onProductClick }
                           </p>
                         )}
                       </div>
-                      <button
-                        onClick={(e) => { e.stopPropagation(); onAddToCart(product); }}
-                        className={`flex items-center gap-2 px-5 py-3 rounded-full font-body text-base font-medium transition-all active:scale-95 ${
-                          addedId === product.id
-                            ? "bg-[hsl(var(--moss))] text-white scale-95"
-                            : "bg-[hsl(var(--bark))] text-white hover:bg-[hsl(var(--moss))] hover:shadow-lg"
-                        }`}
-                      >
-                        {addedId === product.id ? (
-                          <>
-                            <Icon name="Check" size={14} />
-                            Добавлено
-                          </>
-                        ) : (
-                          <>
-                            <Icon name="Plus" size={14} />
-                            В корзину
-                          </>
-                        )}
-                      </button>
+                      {(() => {
+                        const cartItem = cart.find((i) => i.product.id === product.id);
+                        if (cartItem) {
+                          return (
+                            <div
+                              onClick={(e) => e.stopPropagation()}
+                              className="flex items-center gap-2 bg-[hsl(var(--moss))]/10 rounded-full px-2 py-1.5"
+                            >
+                              <button
+                                onClick={() => onUpdateQty(product.id, -1)}
+                                className="w-8 h-8 rounded-full bg-white border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--muted))] transition-colors"
+                              >
+                                <Icon name="Minus" size={13} />
+                              </button>
+                              <span className="font-body font-bold text-base w-5 text-center text-[hsl(var(--foreground))]">
+                                {cartItem.qty}
+                              </span>
+                              <button
+                                onClick={() => onUpdateQty(product.id, 1)}
+                                className="w-8 h-8 rounded-full bg-[hsl(var(--moss))] text-white flex items-center justify-center hover:bg-[hsl(var(--moss-light))] transition-colors"
+                              >
+                                <Icon name="Plus" size={13} />
+                              </button>
+                            </div>
+                          );
+                        }
+                        return (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); onAddToCart(product); }}
+                            className={`flex items-center gap-2 px-5 py-3 rounded-full font-body text-base font-medium transition-all active:scale-95 ${
+                              addedId === product.id
+                                ? "bg-[hsl(var(--moss))] text-white scale-95"
+                                : "bg-[hsl(var(--bark))] text-white hover:bg-[hsl(var(--moss))] hover:shadow-lg"
+                            }`}
+                          >
+                            {addedId === product.id ? (
+                              <>
+                                <Icon name="Check" size={14} />
+                                Добавлено
+                              </>
+                            ) : (
+                              <>
+                                <Icon name="Plus" size={14} />
+                                В корзину
+                              </>
+                            )}
+                          </button>
+                        );
+                      })()}
                     </div>
                   </div>
                 </div>
